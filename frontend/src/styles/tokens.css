@@ -1,0 +1,173 @@
+/**
+ * Mohafiz Case Desk - Design Tokens
+ * 
+ * Brand Color Palette:
+ * - Charcoal:   #323943
+ * - Warm Beige: #DED4CB
+ * - Crimson:    #CD2536
+ */
+
+:root {
+  /* Raw Brand Colors */
+  --brand-charcoal: #323943;
+  --brand-beige: #DED4CB;
+  --brand-crimson: #CD2536;
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, Monaco, monospace;
+
+  /* Font Sizes */
+  --text-xs: 0.75rem;    /* 12px */
+  --text-sm: 0.875rem;   /* 14px */
+  --text-base: 1rem;     /* 16px */
+  --text-lg: 1.125rem;   /* 18px */
+  --text-xl: 1.25rem;    /* 20px */
+  --text-2xl: 1.5rem;    /* 24px */
+  --text-3xl: 1.875rem;  /* 30px */
+  --text-4xl: 2.25rem;   /* 36px */
+
+  /* Spacing */
+  --space-1: 0.25rem;  /* 4px */
+  --space-2: 0.5rem;   /* 8px */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-5: 1.25rem;  /* 20px */
+  --space-6: 1.5rem;   /* 24px */
+  --space-8: 2rem;     /* 32px */
+  --space-10: 2.5rem;  /* 40px */
+  --space-12: 3rem;    /* 48px */
+  --space-16: 4rem;    /* 64px */
+
+  /* Radii */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-theme: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
+
+  /* Elevation / Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+}
+
+/* Light Theme Variables (Default) */
+:root,
+[data-theme='light'] {
+  --theme-name: 'light';
+
+  /* Surface & Backgrounds */
+  --color-bg-page: #F9F7F4;                 /* Warm off-white derived from #DED4CB */
+  --color-bg-surface: #FFFFFF;              /* Clean crisp white card surface */
+  --color-bg-surface-elevated: #FFFFFF;     /* Elevated modals/popovers */
+  --color-bg-subtle: #F3EFEA;               /* Warm subtle container background */
+  --color-bg-muted: #EBE4DC;                /* Subtle interactive hover / badge bg */
+
+  /* Text & Content */
+  --color-text-primary: #323943;            /* Brand charcoal */
+  --color-text-secondary: #5C6573;          /* Muted charcoal with WCAG AA+ contrast */
+  --color-text-muted: #828B99;              /* Subdued metadata */
+  --color-text-inverse: #FFFFFF;            /* Text on dark elements */
+  --color-text-on-crimson: #FFFFFF;         /* Readable text on crimson action */
+
+  /* Brand Action Colors */
+  --color-brand-action: #CD2536;            /* Crimson brand action */
+  --color-brand-action-hover: #B51F2E;      /* Crimson hover */
+  --color-brand-action-active: #9B1926;     /* Crimson pressed */
+
+  /* Neutral Action Colors */
+  --color-action-secondary-bg: #EFEBE5;
+  --color-action-secondary-hover: #E5DFD7;
+  --color-action-secondary-text: #323943;
+
+  /* Borders & Dividers */
+  --color-border-subtle: #ECE5DD;           /* Light dividers */
+  --color-border-medium: #DED4CB;           /* Brand warm beige border */
+  --color-border-strong: #BFB3A6;           /* Emphasized borders */
+
+  /* Focus Indicator */
+  --color-focus-ring: rgba(205, 37, 54, 0.4);
+
+  /* Status Colors (Semantic) */
+  --color-status-success: #15803D;
+  --color-status-success-bg: #EDFDF2;
+  --color-status-success-border: #BBF7D0;
+
+  --color-status-warning: #B45309;
+  --color-status-warning-bg: #FEF9EE;
+  --color-status-warning-border: #FDE68A;
+
+  --color-status-error: #CD2536;
+  --color-status-error-bg: #FDF2F3;
+  --color-status-error-border: #FECDD3;
+
+  --color-status-info: #1D4ED8;
+  --color-status-info-bg: #EFF6FF;
+  --color-status-info-border: #BFDBFE;
+
+  /* Card and Panel Shadow */
+  --shadow-card: 0 1px 3px rgba(50, 57, 67, 0.06), 0 1px 2px rgba(50, 57, 67, 0.04);
+}
+
+/* Dark Theme Variables */
+[data-theme='dark'] {
+  --theme-name: 'dark';
+
+  /* Surface & Backgrounds */
+  --color-bg-page: #1A1F26;                 /* Deep charcoal based on #323943 */
+  --color-bg-surface: #252B35;              /* Lighter charcoal shade surface */
+  --color-bg-surface-elevated: #2D3540;     /* Elevated cards and headers */
+  --color-bg-subtle: #202630;               /* Darker container background */
+  --color-bg-muted: #323943;                /* Brand charcoal muted container */
+
+  /* Text & Content */
+  --color-text-primary: #F4EFEA;            /* Warm off-white derived from #DED4CB */
+  --color-text-secondary: #C2BBB2;          /* Muted warm neutral */
+  --color-text-muted: #8892A0;              /* Subdued metadata */
+  --color-text-inverse: #1A1F26;            /* Text on light inverse elements */
+  --color-text-on-crimson: #FFFFFF;         /* Readable text on crimson */
+
+  /* Brand Action Colors */
+  --color-brand-action: #CD2536;            /* Crimson brand action */
+  --color-brand-action-hover: #DE3849;      /* Slightly brighter crimson for dark mode */
+  --color-brand-action-active: #B51F2E;     /* Crimson active */
+
+  /* Neutral Action Colors */
+  --color-action-secondary-bg: #2F3743;
+  --color-action-secondary-hover: #3A4351;
+  --color-action-secondary-text: #F4EFEA;
+
+  /* Borders & Dividers */
+  --color-border-subtle: #333B47;           /* Subtle charcoal dividers */
+  --color-border-medium: #424D5C;           /* Medium charcoal borders */
+  --color-border-strong: #5A6678;           /* Emphasized borders */
+
+  /* Focus Indicator */
+  --color-focus-ring: rgba(222, 56, 73, 0.5);
+
+  /* Status Colors (Semantic) */
+  --color-status-success: #34D399;
+  --color-status-success-bg: #0E281F;
+  --color-status-success-border: #154D36;
+
+  --color-status-warning: #FBBF24;
+  --color-status-warning-bg: #2C200B;
+  --color-status-warning-border: #563E11;
+
+  --color-status-error: #FB7185;
+  --color-status-error-bg: #301116;
+  --color-status-error-border: #5C1A25;
+
+  --color-status-info: #60A5FA;
+  --color-status-info-bg: #102441;
+  --color-status-info-border: #1E3B6D;
+
+  /* Card and Panel Shadow */
+  --shadow-card: 0 2px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.15);
+}

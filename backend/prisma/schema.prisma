@@ -1,0 +1,206 @@
+// Mohafiz Case Desk - Prisma Schema
+// Phase 2.1: PostgreSQL Database Integration & Core Domain Models
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// -----------------------------------------------------------------------------
+// Enums
+// -----------------------------------------------------------------------------
+
+enum UserRole {
+  CLIENT_USER
+  CRO
+  SFSO
+  FSO
+}
+
+enum CaseIssueType {
+  CUSTOMER_ISSUE
+  FAKE_DELIVERY
+  SNATCHING
+  THEFT
+  OTHER
+}
+
+enum CaseCity {
+  KARACHI
+  LAHORE
+  RAWALPINDI
+  ISLAMABAD
+}
+
+enum CaseSource {
+  CLIENT_PORTAL
+  CRO_LOGGED
+}
+
+enum CaseStatus {
+  SUBMITTED
+  ACKNOWLEDGED
+  ASSIGNED
+  IN_PROGRESS
+  PENDING_REVIEW
+  RESOLVED
+  CLOSED
+  ON_HOLD
+  REJECTED
+  ARCHIVED
+}
+
+enum AssignmentStatus {
+  ACTIVE
+  REASSIGNED
+  COMPLETED
+  CANCELLED
+}
+
+enum AuditEventType {
+  CASE_CREATED
+  CASE_ACKNOWLEDGED
+  CASE_ASSIGNED
+  CASE_REASSIGNED
+  CASE_STATUS_UPDATED
+  FIELD_REPORT_SUBMITTED
+  EVIDENCE_UPLOADED
+  NOTE_ADDED
+  USER_LOGIN
+  USER_LOGOUT
+  SYSTEM_EVENT
+}
+
+// -----------------------------------------------------------------------------
+// Core Domain Models
+// -----------------------------------------------------------------------------
+
+model ClientCompany {
+  id        String   @id @default(uuid())
+  name      String
+  code      String   @unique
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  users User[]
+  cases Case[]
+
+  @@index([code])
+  @@index([isActive])
+  @@map("client_companies")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  fullName     String
+  email        String   @unique
+  passwordHash String
+  role         UserRole
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Association with ClientCompany (required for CLIENT_USER, null for internal staff)
+  clientCompanyId String?
+  clientCompany   ClientCompany? @relation(fields: [clientCompanyId], references: [id], onDelete: Restrict)
+
+  // Relationships
+  createdCases       Case[]       @relation("CaseCreatedBy")
+  assignedCases      Assignment[] @relation("AssignedFSO")
+  createdAssignments Assignment[] @relation("AssignedBy")
+  auditEvents        AuditEvent[] @relation("ActorUser")
+
+  @@index([email])
+  @@index([role])
+  @@index([clientCompanyId])
+  @@index([isActive])
+  @@map("users")
+}
+
+model Case {
+  id              String        @id @default(uuid())
+  publicCaseId    String?       @unique // Nullable until acknowledged by CRO/Operations
+  clientCompanyId String
+  clientCompany   ClientCompany @relation(fields: [clientCompanyId], references: [id], onDelete: Restrict)
+  createdById     String
+  createdBy       User          @relation("CaseCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+
+  issueType      CaseIssueType
+  incidentDate   DateTime
+  city           CaseCity
+  area           String
+  address        String?
+  trackingNumber String?
+  amountAtStake  Decimal       @default(0) @db.Decimal(12, 2)
+  description    String        @db.Text
+  source         CaseSource
+  status         CaseStatus    @default(SUBMITTED)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  assignments Assignment[]
+  auditEvents AuditEvent[]
+
+  @@index([publicCaseId])
+  @@index([clientCompanyId])
+  @@index([createdById])
+  @@index([status])
+  @@index([city])
+  @@index([issueType])
+  @@index([trackingNumber])
+  @@index([incidentDate])
+  @@map("cases")
+}
+
+model Assignment {
+  id              String @id @default(uuid())
+  caseId          String
+  case            Case   @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  assignedFsoId   String
+  assignedFso     User   @relation("AssignedFSO", fields: [assignedFsoId], references: [id], onDelete: Restrict)
+  assigningUserId String
+  assigningUser   User   @relation("AssignedBy", fields: [assigningUserId], references: [id], onDelete: Restrict)
+
+  status AssignmentStatus @default(ACTIVE)
+  notes  String?          @db.Text
+
+  assignedAt     DateTime  @default(now())
+  acknowledgedAt DateTime?
+  completedAt    DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([assignedFsoId])
+  @@index([assigningUserId])
+  @@index([status])
+  @@map("assignments")
+}
+
+model AuditEvent {
+  id           String  @id @default(uuid())
+  caseId       String?
+  case         Case?   @relation(fields: [caseId], references: [id], onDelete: SetNull)
+  actingUserId String?
+  actingUser   User?   @relation("ActorUser", fields: [actingUserId], references: [id], onDelete: SetNull)
+
+  eventType AuditEventType
+  details   Json?
+
+  createdAt DateTime @default(now())
+
+  @@index([caseId])
+  @@index([actingUserId])
+  @@index([eventType])
+  @@index([createdAt])
+  @@map("audit_events")
+}
